@@ -22,15 +22,26 @@ public class BudgetService
         var endYearMonth = end.ToString("yyyyMM");
         var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
         var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
+        
         if (startYearMonth != endYearMonth)
         {
+            var nextMonthFirst = new DateTime(start.Year, start.Month + 1, 1);
+            var sum = 0;
+            while (nextMonthFirst.Year <= end.Year && nextMonthFirst.Month < end.Month)
+            {
+                var budget = GetBudget(budgets, $"{nextMonthFirst:yyyyMM}");
+                sum += budget.Amount;
+                nextMonthFirst = nextMonthFirst.AddMonths(1);
+            }
+            
             var startBudget = GetBudget(budgets, startYearMonth);
             var endBudget = GetBudget(budgets, endYearMonth);
 
             var startBudgetPerDay = startBudget.Amount / startMonthDays;
             var endBudgetPerDay = endBudget.Amount / endMonthDays;
 
-            return startBudgetPerDay * (startMonthDays - start.Day + 1) + endBudgetPerDay * (end.Day);
+            sum += startBudgetPerDay * (startMonthDays - start.Day + 1) + endBudgetPerDay * (end.Day);
+            return sum;
         }
         
         var firstOrDefault = GetBudget(budgets, startYearMonth);
