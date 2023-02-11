@@ -25,12 +25,13 @@ public class BudgetService
         
         if (startYearMonth != endYearMonth)
         {
-            var nextMonthFirst = new DateTime(start.Year, start.Month + 1, 1);
+            var temp = start.AddMonths(1);
+            var nextMonthFirst = new DateTime(temp.Year, temp.Month, 1);
             var sum = 0;
-            while (nextMonthFirst.Year <= end.Year && nextMonthFirst.Month < end.Month)
+            while (nextMonthFirst < new DateTime(end.Year, end.Month, 1))
             {
                 var budget = GetBudget(budgets, $"{nextMonthFirst:yyyyMM}");
-                sum += budget.Amount;
+                if (budget != null) sum += budget.Amount;
                 nextMonthFirst = nextMonthFirst.AddMonths(1);
             }
             
@@ -44,10 +45,12 @@ public class BudgetService
             return sum;
         }
         
-        var firstOrDefault = GetBudget(budgets, startYearMonth);
-        var amount = firstOrDefault.Amount;
+        var oneMonthBudget = GetBudget(budgets, startYearMonth);
+        if (oneMonthBudget == null) return 0;
+        
+        var amount = oneMonthBudget.Amount;
         var amountPerDay = amount / startMonthDays;
-        return amountPerDay;
+        return amountPerDay * ((end - start).Days + 1);
     }
 
     private static Budget? GetBudget(List<Budget> budgets, string yearMonth)
