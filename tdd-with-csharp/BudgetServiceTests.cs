@@ -44,7 +44,7 @@ public class BudgetService
         var budgets = _budgetRepo.GetAll();
         var firstOrDefault = budgets.Where(b => b.YearMonth == $"{start:yyyyMM}").FirstOrDefault();
         var amount = firstOrDefault.Amount;
-        var amountPerDay = amount / 28;
+        var amountPerDay = amount / DateTime.DaysInMonth(start.Year,start.Month);
         return amountPerDay;
     }
 }
