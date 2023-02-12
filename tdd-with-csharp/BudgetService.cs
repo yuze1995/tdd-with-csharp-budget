@@ -21,8 +21,6 @@ public class BudgetService
     {
         var budgets = _budgetRepo.GetAll();
 
-        var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
-        var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
 
         if (start.ToString("yyyyMM") != end.ToString("yyyyMM"))
         {
@@ -38,24 +36,31 @@ public class BudgetService
                 currentMonth = currentMonth.AddMonths(1);
             }
 
+
+            var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
             var startBudget = GetBudget(budgets, start.ToString("yyyyMM"));
             var startBudgetPerDay = startBudget?.Amount / startMonthDays ?? 0;
+            var amountOfStart = startBudgetPerDay * (startMonthDays - start.Day + 1);
 
+            var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
             var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
             var endBudgetPerDay = endBudget?.Amount / endMonthDays ?? 0;
-
-            var amountOfStart = startBudgetPerDay * (startMonthDays - start.Day + 1);
             var amountOfEnd = endBudgetPerDay * (end.Day);
+
             sum += amountOfStart + amountOfEnd;
             return sum;
         }
+        else
+        {
+            var oneMonthBudget = GetBudget(budgets, start.ToString("yyyyMM"));
+            if (oneMonthBudget == null) return 0;
 
-        var oneMonthBudget = GetBudget(budgets, start.ToString("yyyyMM"));
-        if (oneMonthBudget == null) return 0;
-
-        var amount = oneMonthBudget.Amount;
-        var amountPerDay = amount / startMonthDays;
-        return amountPerDay * ((end - start).Days + 1);
+            var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
+            var amount = oneMonthBudget.Amount;
+            var amountPerDay = amount / startMonthDays;
+            
+            return amountPerDay * ((end - start).Days + 1);
+        }
     }
 
     private static Budget? GetBudget(List<Budget> budgets, string yearMonth)
