@@ -41,19 +41,8 @@ public class BudgetService
                     else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
                     {
                         var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
-                        var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
-                        int endBudgetPerDay;
-                        if (endBudget != null)
-                        {
-                            endBudgetPerDay = endBudget.Amount / endMonthDays;
-                        }
-                        else
-                        {
-                            endBudgetPerDay = 0;
-                        }
-
+                        var endBudgetPerDay = budget.Amount / endMonthDays;
                         var amountOfEnd = endBudgetPerDay * (end.Day);
-
                         sum += amountOfEnd;
                     }
                     else
