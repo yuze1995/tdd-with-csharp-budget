@@ -44,7 +44,9 @@ public class BudgetService
             var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
             var endBudgetPerDay = endBudget?.Amount / endMonthDays ?? 0;
 
-            sum += startBudgetPerDay * (startMonthDays - start.Day + 1) + endBudgetPerDay * (end.Day);
+            var amountOfStart = startBudgetPerDay * (startMonthDays - start.Day + 1);
+            var amountOfEnd = endBudgetPerDay * (end.Day);
+            sum += amountOfStart + amountOfEnd;
             return sum;
         }
 
