@@ -33,18 +33,36 @@ public class BudgetService
                 {
                     sum += budget.Amount;
                 }
+
                 currentMonth = currentMonth.AddMonths(1);
             }
 
-
             var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
             var startBudget = GetBudget(budgets, start.ToString("yyyyMM"));
-            var startBudgetPerDay = startBudget?.Amount / startMonthDays ?? 0;
+            int startBudgetPerDay;
+            if (startBudget != null)
+            {
+                startBudgetPerDay = startBudget.Amount / startMonthDays;
+            }
+            else
+            {
+                startBudgetPerDay = 0;
+            }
+
             var amountOfStart = startBudgetPerDay * (startMonthDays - start.Day + 1);
 
             var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
             var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
-            var endBudgetPerDay = endBudget?.Amount / endMonthDays ?? 0;
+            int endBudgetPerDay;
+            if (endBudget != null)
+            {
+                endBudgetPerDay = endBudget.Amount / endMonthDays;
+            }
+            else
+            {
+                endBudgetPerDay = 0;
+            }
+
             var amountOfEnd = endBudgetPerDay * (end.Day);
 
             sum += amountOfStart + amountOfEnd;
@@ -58,7 +76,7 @@ public class BudgetService
             var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
             var amount = oneMonthBudget.Amount;
             var amountPerDay = amount / startMonthDays;
-            
+
             return amountPerDay * ((end - start).Days + 1);
         }
     }
