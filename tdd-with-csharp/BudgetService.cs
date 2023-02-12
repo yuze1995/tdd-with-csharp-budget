@@ -26,7 +26,7 @@ public class BudgetService
         {
             var currentMonth = start;
             var sum = 0;
-            while (currentMonth < new DateTime(end.Year, end.Month, 1))
+            while (currentMonth < new DateTime(end.Year, end.Month, 1).AddMonths(1))
             {
                 var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
                 if (budget != null)
@@ -47,6 +47,24 @@ public class BudgetService
 
                         var amountOfStart = startBudgetPerDay * (startMonthDays - start.Day + 1);
                         sum += amountOfStart;
+                    }
+                    else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
+                    {
+                        var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
+                        var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
+                        int endBudgetPerDay;
+                        if (endBudget != null)
+                        {
+                            endBudgetPerDay = endBudget.Amount / endMonthDays;
+                        }
+                        else
+                        {
+                            endBudgetPerDay = 0;
+                        }
+
+                        var amountOfEnd = endBudgetPerDay * (end.Day);
+
+                        sum += amountOfEnd;
                     }
                     else
                     {
@@ -70,21 +88,6 @@ public class BudgetService
             // }
 
 
-            var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
-            var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
-            int endBudgetPerDay;
-            if (endBudget != null)
-            {
-                endBudgetPerDay = endBudget.Amount / endMonthDays;
-            }
-            else
-            {
-                endBudgetPerDay = 0;
-            }
-
-            var amountOfEnd = endBudgetPerDay * (end.Day);
-
-            sum += amountOfEnd;
             return sum;
         }
         else
