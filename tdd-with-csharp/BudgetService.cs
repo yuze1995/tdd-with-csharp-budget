@@ -29,33 +29,30 @@ public class BudgetService
             while (currentMonth < new DateTime(end.Year, end.Month, 1).AddMonths(1))
             {
                 var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
+                DateTime overlappingEnd;
+                DateTime overlappingStart;
+
                 if (budget != null)
                 {
                     if (currentMonth.ToString("yyyyMM") == start.ToString("yyyyMM"))
                     {
-                        var overlappingEnd = budget.GetLastDay();
-                        var overlappingStart = start;
-                        var overlappingDay = (overlappingEnd - overlappingStart).Days + 1;
-                        var dailyAmount = budget.Amount / budget.GetDays();
-                        sum += dailyAmount * overlappingDay;
+                        overlappingEnd = budget.GetLastDay();
+                        overlappingStart = start;
                     }
                     else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
                     {
-                        var overlappingEnd = end;
-                        var overlappingStart = budget.GetFirstDay();
-                        var overlappingDay = (overlappingEnd - overlappingStart).Days + 1;
-                        var dailyAmount = budget.Amount / budget.GetDays();
-                        sum += dailyAmount * overlappingDay;
+                        overlappingEnd = end;
+                        overlappingStart = budget.GetFirstDay();
                     }
                     else
                     {
-                        var overlappingEnd = budget.GetLastDay();
-                        var overlappingStart = budget.GetFirstDay();
-                        var overlappingDay = (overlappingEnd - overlappingStart).Days + 1;
-                        var dailyAmount = budget.Amount / budget.GetDays();
-                        sum += dailyAmount * overlappingDay;
-                        // sum += budget.Amount;
+                        overlappingEnd = budget.GetLastDay();
+                        overlappingStart = budget.GetFirstDay();
                     }
+
+                    var overlappingDay = (overlappingEnd - overlappingStart).Days + 1;
+                    var dailyAmount = budget.Amount / budget.GetDays();
+                    sum += dailyAmount * overlappingDay;
                 }
 
                 currentMonth = currentMonth.AddMonths(1);
