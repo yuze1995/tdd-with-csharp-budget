@@ -20,39 +20,24 @@ public class BudgetService
     public double Query(DateTime start, DateTime end)
     {
         var budgets = _budgetRepo.GetAll();
-
-
-        if (start.ToString("yyyyMM") != end.ToString("yyyyMM"))
+        
+        var currentMonth = start;
+        var sum = 0;
+        var period = new Period(start, end);
+        while (currentMonth < new DateTime(end.Year, end.Month, 1).AddMonths(1))
         {
-            var currentMonth = start;
-            var sum = 0;
-            var period = new Period(start, end);
-            while (currentMonth < new DateTime(end.Year, end.Month, 1).AddMonths(1))
+            var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
+
+            if (budget != null)
             {
-                var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
-
-                if (budget != null)
-                {
-                    var overlappingAmount = budget.GetOverlappingAmount(period);
-                    sum += overlappingAmount;
-                }
-
-                currentMonth = currentMonth.AddMonths(1);
+                var overlappingAmount = budget.GetOverlappingAmount(period);
+                sum += overlappingAmount;
             }
 
-            return sum;
+            currentMonth = currentMonth.AddMonths(1);
         }
-        else
-        {
-            var oneMonthBudget = GetBudget(budgets, start.ToString("yyyyMM"));
-            if (oneMonthBudget == null) return 0;
 
-            var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
-            var amount = oneMonthBudget.Amount;
-            var amountPerDay = amount / startMonthDays;
-
-            return amountPerDay * ((end - start).Days + 1);
-        }
+        return sum;
     }
 
     private static Budget? GetBudget(List<Budget> budgets, string yearMonth) => budgets.FirstOrDefault(b => b.YearMonth == yearMonth);
