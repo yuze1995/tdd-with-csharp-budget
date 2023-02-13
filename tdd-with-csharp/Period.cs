@@ -15,22 +15,26 @@ public class Period
 
     public int GetOverlappingDays(Budget budget)
     {
-        DateTime overlappingEnd;
-        DateTime overlappingStart;
+        var overlappingEnd = budget.YearMonth == End.ToString("yyyyMM") 
+            ? End
+            : budget.GetLastDay();
+        var overlappingStart = budget.YearMonth == Start.ToString("yyyyMM")
+            ? Start
+            : budget.GetFirstDay();
         if (budget.YearMonth == Start.ToString("yyyyMM"))
         {
-            overlappingEnd = budget.GetLastDay();
-            overlappingStart = Start;
+            // overlappingEnd = budget.GetLastDay();
+            // overlappingStart = Start;
         }
         else if (budget.YearMonth == End.ToString("yyyyMM"))
         {
-            overlappingEnd = End;
-            overlappingStart = budget.GetFirstDay();
+            // overlappingEnd = End;
+            // overlappingStart = budget.GetFirstDay();
         }
         else
         {
-            overlappingEnd = budget.GetLastDay();
-            overlappingStart = budget.GetFirstDay();
+            // overlappingEnd = budget.GetLastDay();
+            // overlappingStart = budget.GetFirstDay();
         }
 
         return (overlappingEnd - overlappingStart).Days + 1;
