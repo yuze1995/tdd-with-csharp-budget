@@ -9,7 +9,7 @@ public class Budget
 
     public int GetDays()
     {
-        _ = DateOnly.TryParseExact(YearMonth, "yyyyMM", out var firstDay);
+        var firstDay = GetFirstDay();
         return DateTime.DaysInMonth(firstDay.Year, firstDay.Month);
     }
 
