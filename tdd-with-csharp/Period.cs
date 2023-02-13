@@ -15,8 +15,9 @@ public class Period
 
     public int GetOverlappingDays(Budget budget)
     {
-        var firstDay = budget.GetFirstDay();
-        var lastDay = budget.GetLastDay();
+        var another = new Period(budget.GetFirstDay(), budget.GetLastDay());
+        var firstDay = another.Start;
+        var lastDay = another.End;
         
         var overlappingStart = Start > firstDay
             ? Start
