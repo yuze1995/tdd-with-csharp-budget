@@ -27,4 +27,6 @@ public class Budget
     {
         return new Period(GetFirstDay(), GetLastDay());
     }
+
+    public int GetDailyAmount() => Amount / GetDays();
 }
