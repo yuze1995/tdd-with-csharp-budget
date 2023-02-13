@@ -11,31 +11,16 @@ public class Period
     }
 
     private DateTime Start { get; }
-    private DateTime End { get; set; }
+    private DateTime End { get; }
 
     public int GetOverlappingDays(Budget budget)
     {
-        var overlappingEnd = budget.YearMonth == End.ToString("yyyyMM") 
-            ? End
-            : budget.GetLastDay();
-        var overlappingStart = budget.YearMonth == Start.ToString("yyyyMM")
+        var overlappingStart = Start > budget.GetFirstDay()
             ? Start
             : budget.GetFirstDay();
-        if (budget.YearMonth == Start.ToString("yyyyMM"))
-        {
-            // overlappingEnd = budget.GetLastDay();
-            // overlappingStart = Start;
-        }
-        else if (budget.YearMonth == End.ToString("yyyyMM"))
-        {
-            // overlappingEnd = End;
-            // overlappingStart = budget.GetFirstDay();
-        }
-        else
-        {
-            // overlappingEnd = budget.GetLastDay();
-            // overlappingStart = budget.GetFirstDay();
-        }
+        var overlappingEnd = End < budget.GetLastDay() 
+            ? End
+            : budget.GetLastDay();
 
         return (overlappingEnd - overlappingStart).Days + 1;
     }
