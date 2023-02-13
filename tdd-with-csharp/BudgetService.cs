@@ -32,7 +32,7 @@ public class BudgetService
 
                 if (budget != null)
                 {
-                    var overlappingDay = new Period(start, end).GetOverlappingDays(budget);
+                    var overlappingDay = new Period(start, end).GetOverlappingDays(new Period(budget.GetFirstDay(), budget.GetLastDay()));
                     var dailyAmount = budget.Amount / budget.GetDays();
                     sum += dailyAmount * overlappingDay;
                 }
