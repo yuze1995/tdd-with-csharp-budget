@@ -29,4 +29,6 @@ public class Budget
     }
 
     public int GetDailyAmount() => Amount / GetDays();
+
+    public int GetOverlappingAmount(Period period) => GetDailyAmount() * period.GetOverlappingDays(CreatePeriod());
 }
