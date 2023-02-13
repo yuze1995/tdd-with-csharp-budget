@@ -22,4 +22,28 @@ public class Budget
     {
         return DateTime.ParseExact(YearMonth, "yyyyMM", null);
     }
+
+    public int GetOverlappingDays(DateTime start, DateTime end)
+    {
+        DateTime overlappingEnd;
+        DateTime overlappingStart;
+        if (YearMonth == start.ToString("yyyyMM"))
+        {
+            overlappingEnd = GetLastDay();
+            overlappingStart = start;
+        }
+        else if (YearMonth == end.ToString("yyyyMM"))
+        {
+            overlappingEnd = end;
+            overlappingStart = GetFirstDay();
+        }
+        else
+        {
+            overlappingEnd = GetLastDay();
+            overlappingStart = GetFirstDay();
+        }
+
+        var overlappingDay = (overlappingEnd - overlappingStart).Days + 1;
+        return overlappingDay;
+    }
 }

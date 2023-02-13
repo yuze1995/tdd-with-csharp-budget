@@ -29,28 +29,10 @@ public class BudgetService
             while (currentMonth < new DateTime(end.Year, end.Month, 1).AddMonths(1))
             {
                 var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
-                DateTime overlappingEnd;
-                DateTime overlappingStart;
 
                 if (budget != null)
                 {
-                    if (budget.YearMonth == start.ToString("yyyyMM"))
-                    {
-                        overlappingEnd = budget.GetLastDay();
-                        overlappingStart = start;
-                    }
-                    else if (budget.YearMonth == end.ToString("yyyyMM"))
-                    {
-                        overlappingEnd = end;
-                        overlappingStart = budget.GetFirstDay();
-                    }
-                    else
-                    {
-                        overlappingEnd = budget.GetLastDay();
-                        overlappingStart = budget.GetFirstDay();
-                    }
-
-                    var overlappingDay = (overlappingEnd - overlappingStart).Days + 1;
+                    var overlappingDay = budget.GetOverlappingDays(start, end);
                     var dailyAmount = budget.Amount / budget.GetDays();
                     sum += dailyAmount * overlappingDay;
                 }
