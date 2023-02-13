@@ -34,7 +34,7 @@ public class BudgetService
                 if (budget != null)
                 {
                     var overlappingDay = period.GetOverlappingDays(budget.CreatePeriod());
-                    var dailyAmount = budget.Amount / budget.GetDays();
+                    var dailyAmount = GetDailyAmount(budget);
                     sum += dailyAmount * overlappingDay;
                 }
 
@@ -56,8 +56,7 @@ public class BudgetService
         }
     }
 
-    private static Budget? GetBudget(List<Budget> budgets, string yearMonth)
-    {
-        return budgets.FirstOrDefault(b => b.YearMonth == yearMonth);
-    }
+    private static int GetDailyAmount(Budget budget) => budget.Amount / budget.GetDays();
+
+    private static Budget? GetBudget(List<Budget> budgets, string yearMonth) => budgets.FirstOrDefault(b => b.YearMonth == yearMonth);
 }
