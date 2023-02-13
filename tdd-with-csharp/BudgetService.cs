@@ -21,16 +21,9 @@ public class BudgetService
     {
         var budgets = _budgetRepo.GetAll();
 
-        var sum = 0;
         var period = new Period(start, end);
 
-        foreach (var budget in budgets)
-        {
-            var overlappingAmount = budget.GetOverlappingAmount(period);
-            sum += overlappingAmount;
-        }
-        
-        return sum;
+        return budgets.Sum(budget => budget.GetOverlappingAmount(period));
     }
 
     private static Budget? GetBudget(List<Budget> budgets, string yearMonth) => budgets.FirstOrDefault(b => b.YearMonth == yearMonth);
