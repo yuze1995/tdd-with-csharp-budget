@@ -12,4 +12,9 @@ public class Budget
         _ = DateOnly.TryParseExact(YearMonth, "yyyyMM", out var firstDay);
         return DateTime.DaysInMonth(firstDay.Year, firstDay.Month);
     }
+
+    public DateTime GetLastDay()
+    {
+        return DateTime.ParseExact(YearMonth + GetDays(), "yyyyMMdd", null);
+    }
 }
