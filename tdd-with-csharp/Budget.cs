@@ -22,4 +22,9 @@ public class Budget
     {
         return DateTime.ParseExact(YearMonth, "yyyyMM", null);
     }
+
+    public Period CreatePeriod()
+    {
+        return new Period(GetFirstDay(), GetLastDay());
+    }
 }
