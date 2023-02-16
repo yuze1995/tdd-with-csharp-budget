@@ -49,7 +49,12 @@ public class BudgetService
                     }
                     else
                     {
-                        sum += budget.Amount;
+                        var overlappingDays = budget.GetDays();
+                        var dailyAmount = budget.Amount / budget.GetDays();
+                        var endBudgetAmount = dailyAmount * overlappingDays;
+                        sum += endBudgetAmount;
+
+                        // sum += budget.Amount;
                     }
                 }
 
