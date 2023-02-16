@@ -35,41 +35,26 @@ public class BudgetService
                 {
                     if (currentMonth.ToString("yyyyMM") == start.ToString("yyyyMM"))
                     {
-                        var overlappingDays = (startMonthDays - start.Day + 1);
+                        var overlappingDays = (budget.GetDays() - start.Day + 1);
                         var dailyAmount = budget.Amount / budget.GetDays();
-                        var startBudgetAmount = dailyAmount * overlappingDays;
-                        sum += startBudgetAmount;
+                        sum += dailyAmount * overlappingDays;
                     }
                     else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
                     {
                         var overlappingDays = end.Day;
                         var dailyAmount = budget.Amount / budget.GetDays();
-                        var endBudgetAmount = dailyAmount * overlappingDays;
-                        sum += endBudgetAmount;
+                        sum += dailyAmount * overlappingDays;
                     }
                     else
                     {
                         var overlappingDays = budget.GetDays();
                         var dailyAmount = budget.Amount / budget.GetDays();
-                        var endBudgetAmount = dailyAmount * overlappingDays;
-                        sum += endBudgetAmount;
-
-                        // sum += budget.Amount;
+                        sum += dailyAmount * overlappingDays;
                     }
                 }
 
                 currentMonth = currentMonth.AddMonths(1);
             }
-
-            // var startBudget = GetBudget(budgets, start.ToString("yyyyMM"));
-            // var startBudgetPerDay = startBudget?.Amount / startMonthDays ?? 0;
-            // var startBudgetAmount = startBudgetPerDay * (startMonthDays - start.Day + 1);
-            // sum += startBudgetAmount;
-
-            // var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
-            // var endBudgetPerDay = endBudget?.Amount / endMonthDays ?? 0;
-            // var endBudgetAmount = endBudgetPerDay * (end.Day);
-            // sum += endBudgetAmount;
 
             return sum;
         }
