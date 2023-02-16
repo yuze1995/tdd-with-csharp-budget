@@ -22,7 +22,6 @@ public class BudgetService
         var budgets = _budgetRepo.GetAll();
 
         var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
-        var endMonthDays = DateTime.DaysInMonth(end.Year, end.Month);
 
         if (start.ToString("yyyyMM") != end.ToString("yyyyMM"))
         {
@@ -34,10 +33,11 @@ public class BudgetService
                 if (budget != null)
                 {
                     DateTime overlappingEnd;
+                    DateTime overlappingStart;
                     if (currentMonth.ToString("yyyyMM") == start.ToString("yyyyMM"))
                     {
                         overlappingEnd = budget.GetLastDay();
-                        var overlappingStart = start;
+                        overlappingStart = start;
                         var overlappingDays = (overlappingEnd - overlappingStart).Days + 1;
                         var dailyAmount = budget.Amount / budget.GetDays();
                         sum += dailyAmount * overlappingDays;
@@ -45,7 +45,7 @@ public class BudgetService
                     else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
                     {
                         overlappingEnd = end;
-                        var overlappingStart = budget.GetFirstDay();
+                        overlappingStart = budget.GetFirstDay();
                         var overlappingDays = (overlappingEnd - overlappingStart).Days + 1;
                         var dailyAmount = budget.Amount / budget.GetDays();
                         sum += dailyAmount * overlappingDays;
@@ -53,7 +53,7 @@ public class BudgetService
                     else
                     {
                         overlappingEnd = budget.GetLastDay();
-                        var overlappingStart = budget.GetFirstDay();
+                        overlappingStart = budget.GetFirstDay();
                         var overlappingDays = (overlappingEnd - overlappingStart).Days + 1;
                         var dailyAmount = budget.Amount / budget.GetDays();
                         sum += dailyAmount * overlappingDays;
