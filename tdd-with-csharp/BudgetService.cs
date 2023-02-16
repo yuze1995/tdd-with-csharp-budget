@@ -35,13 +35,31 @@ public class BudgetService
                 {
                     if (currentMonth.ToString("yyyyMM") == start.ToString("yyyyMM"))
                     {
-                        var startBudgetPerDay = budget?.Amount / startMonthDays ?? 0;
+                        int startBudgetPerDay;
+                        if (budget != null)
+                        {
+                            startBudgetPerDay = budget.Amount / startMonthDays;
+                        }
+                        else
+                        {
+                            startBudgetPerDay = 0;
+                        }
+
                         var startBudgetAmount = startBudgetPerDay * (startMonthDays - start.Day + 1);
                         sum += startBudgetAmount;
                     }
-                    else if(currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
+                    else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
                     {
-                        var endBudgetPerDay = budget?.Amount / endMonthDays ?? 0;
+                        int endBudgetPerDay;
+                        if (budget != null)
+                        {
+                            endBudgetPerDay = budget.Amount / endMonthDays;
+                        }
+                        else
+                        {
+                            endBudgetPerDay = 0;
+                        }
+
                         var endBudgetAmount = endBudgetPerDay * (end.Day);
                         sum += endBudgetAmount;
                     }
