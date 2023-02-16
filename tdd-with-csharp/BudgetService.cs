@@ -1,8 +1,6 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 #endregion
 
@@ -29,10 +27,5 @@ public class BudgetService
         }
 
         return sum;
-    }
-
-    private static Budget? GetBudget(List<Budget> budgets, string yearMonth)
-    {
-        return budgets.FirstOrDefault(b => b.YearMonth == yearMonth);
     }
 }
