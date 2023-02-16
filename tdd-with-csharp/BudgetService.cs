@@ -26,8 +26,7 @@ public class BudgetService
 
         if (start.ToString("yyyyMM") != end.ToString("yyyyMM"))
         {
-            var temp = start.AddMonths(1);
-            var currentMonth = new DateTime(temp.Year, temp.Month, 1);
+            var currentMonth = new DateTime(start.Year, start.Month, 1).AddMonths(1);
             var sum = 0;
             while (currentMonth < new DateTime(end.Year, end.Month, 1))
             {
@@ -48,8 +47,8 @@ public class BudgetService
             var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
             var endBudgetPerDay = endBudget?.Amount / endMonthDays ?? 0;
             var endBudgetAmount = endBudgetPerDay * (end.Day);
-
             sum += endBudgetAmount;
+
             return sum;
         }
 
