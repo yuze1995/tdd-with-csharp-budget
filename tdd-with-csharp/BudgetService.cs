@@ -35,13 +35,14 @@ public class BudgetService
                 {
                     if (currentMonth.ToString("yyyyMM") == start.ToString("yyyyMM"))
                     {
-                        var overlappingDays = (budget.GetDays() - start.Day + 1);
+                        var overlappingDays = (budget.GetLastDay() - start).Days + 1;
                         var dailyAmount = budget.Amount / budget.GetDays();
                         sum += dailyAmount * overlappingDays;
                     }
                     else if (currentMonth.ToString("yyyyMM") == end.ToString("yyyyMM"))
                     {
-                        var overlappingDays = end.Day;
+                        var overlappingDays = (end - budget.GetFirstDay()).Days + 1;
+                        // var overlappingDays = end.Day;
                         var dailyAmount = budget.Amount / budget.GetDays();
                         sum += dailyAmount * overlappingDays;
                     }

@@ -9,7 +9,17 @@ public class Budget
 
     public int GetDays()
     {
-        var date = DateTime.ParseExact(YearMonth, "yyyyMM", null);
-        return DateTime.DaysInMonth(date.Year, date.Month);
+        var firstDay = GetFirstDay();
+        return DateTime.DaysInMonth(firstDay.Year, firstDay.Month);
+    }
+
+    public DateTime GetLastDay()
+    {
+        return DateTime.ParseExact($"{YearMonth}{GetDays()}", "yyyyMMdd", null);
+    }
+
+    public DateTime GetFirstDay()
+    {
+        return DateTime.ParseExact(YearMonth, "yyyyMM", null);
     }
 }
