@@ -43,12 +43,13 @@ public class BudgetService
             var startBudget = GetBudget(budgets, start.ToString("yyyyMM"));
             var startBudgetPerDay = startBudget?.Amount / startMonthDays ?? 0;
             var startBudgetAmount = startBudgetPerDay * (startMonthDays - start.Day + 1);
+            sum += startBudgetAmount;
 
             var endBudget = GetBudget(budgets, end.ToString("yyyyMM"));
             var endBudgetPerDay = endBudget?.Amount / endMonthDays ?? 0;
             var endBudgetAmount = endBudgetPerDay * (end.Day);
 
-            sum += startBudgetAmount + endBudgetAmount;
+            sum += endBudgetAmount;
             return sum;
         }
 
