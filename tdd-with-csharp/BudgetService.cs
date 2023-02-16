@@ -55,21 +55,23 @@ public class BudgetService
     {
         var overlappingEnd = budget.YearMonth == end.ToString("yyyyMM") 
             ? end : budget.GetLastDay();
-        DateTime overlappingStart;
+        var overlappingStart = budget.YearMonth == start.ToString("yyyyMM")
+            ? start 
+            : budget.GetFirstDay();
         if (budget.YearMonth == start.ToString("yyyyMM"))
         {
             // overlappingEnd = budget.GetLastDay();
-            overlappingStart = start;
+            // overlappingStart = start;
         }
         else if (budget.YearMonth == end.ToString("yyyyMM"))
         {
             // overlappingEnd = end;
-            overlappingStart = budget.GetFirstDay();
+            // overlappingStart = budget.GetFirstDay();
         }
         else
         {
             // overlappingEnd = budget.GetLastDay();
-            overlappingStart = budget.GetFirstDay();
+            // overlappingStart = budget.GetFirstDay();
         }
 
         return (overlappingEnd - overlappingStart).Days + 1;
