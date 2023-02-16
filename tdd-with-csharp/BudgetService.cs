@@ -21,38 +21,14 @@ public class BudgetService
     {
         var budgets = _budgetRepo.GetAll();
 
-        var startMonthDays = DateTime.DaysInMonth(start.Year, start.Month);
-
-        if (start.ToString("yyyyMM") != end.ToString("yyyyMM"))
+        var sum = 0;
+        foreach (var budget in budgets)
         {
-            var currentMonth = new DateTime(start.Year, start.Month, 1);
-            var sum = 0;
-            while (currentMonth < new DateTime(end.Year, end.Month, 1).AddMonths(1))
-            {
-                var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
-                if (budget != null)
-                {
-                    var budgetEnd = budget.GetLastDay();
-                    var budgetStart = budget.GetFirstDay();
-                    var period = new Period(start, end);
-
-                    var overlappingDays = period.GetOverlappingDays(new Period(budgetStart, budgetEnd));
-                    var dailyAmount = budget.Amount / budget.GetDays();
-                    sum += dailyAmount * overlappingDays;
-                }
-
-                currentMonth = currentMonth.AddMonths(1);
-            }
-
-            return sum;
+            var period = new Period(start, end);
+            sum += budget.GetOverlappingAmount(period);
         }
 
-        var oneMonthBudget = GetBudget(budgets, start.ToString("yyyyMM"));
-        if (oneMonthBudget == null) return 0;
-
-        var amount = oneMonthBudget.Amount;
-        var amountPerDay = amount / startMonthDays;
-        return amountPerDay * ((end - start).Days + 1);
+        return sum;
     }
 
     private static Budget? GetBudget(List<Budget> budgets, string yearMonth)
