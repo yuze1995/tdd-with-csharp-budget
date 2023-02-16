@@ -31,7 +31,7 @@ public class BudgetService
             var sum = 0;
             while (currentMonth < new DateTime(end.Year, end.Month, 1))
             {
-                var budget = GetBudget(budgets, $"{currentMonth:yyyyMM}");
+                var budget = GetBudget(budgets, currentMonth.ToString("yyyyMM"));
                 if (budget != null)
                 {
                     sum += budget.Amount;
